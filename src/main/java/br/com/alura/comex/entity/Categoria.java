@@ -57,4 +57,7 @@ public class Categoria {
         this.produtos.add(produto);
     }
 
+    public void ativa() {
+        this.status = StatusCategoria.ATIVA;
+    }
 }
