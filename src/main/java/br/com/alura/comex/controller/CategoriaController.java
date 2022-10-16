@@ -10,19 +10,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/api/categorias")
 class CategoriaController {
 
     private final CategoriaRepository categoriaRepository;
 
-    public CategoriaController(CategoriaRepository categoriaRepository) {
+    CategoriaController(CategoriaRepository categoriaRepository) {
         this.categoriaRepository = categoriaRepository;
     }
-
-
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<Void> novaCategoria(@RequestBody NovaCategoriaRequest novaCategoriaRequest, UriComponentsBuilder uriBuilder) {
+    ResponseEntity<Void> novaCategoria(@RequestBody @Valid NovaCategoriaRequest novaCategoriaRequest,
+                                       UriComponentsBuilder uriBuilder) {
 
         var novaCategoria = novaCategoriaRequest.toCategoriaAtiva();
 
