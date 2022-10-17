@@ -1,13 +1,16 @@
 package br.com.alura.comex.controller;
 
 import br.com.alura.comex.controller.dto.NovoProdutoRequest;
+import br.com.alura.comex.controller.dto.ProdutosPaginadosResponse;
 import br.com.alura.comex.repository.CategoriaRepository;
 import br.com.alura.comex.repository.ProdutoRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
@@ -46,4 +49,16 @@ class ProdutoController {
 
         return ResponseEntity.created(location).build();
     }
+
+    @GetMapping
+    ResponseEntity<Page<ProdutosPaginadosResponse>> listaProdutos(
+            @PageableDefault(sort = "nome", direction = Sort.Direction.ASC) Pageable pageable) {
+
+        var pagesOfProducts = produtoRepository.findAll(pageable);
+
+        var produtosPaginadosResponse = ProdutosPaginadosResponse.from(pagesOfProducts);
+
+        return ResponseEntity.ok(produtosPaginadosResponse);
+    }
+
 }
