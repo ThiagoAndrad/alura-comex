@@ -1,13 +1,12 @@
 package br.com.alura.comex.controller;
 
 import br.com.alura.comex.controller.dto.NovaCategoriaRequest;
+import br.com.alura.comex.controller.dto.PedidosPorCategoriaResponse;
 import br.com.alura.comex.repository.CategoriaRepository;
+import br.com.alura.comex.repository.PedidoRepository;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
@@ -17,10 +16,13 @@ import javax.validation.Valid;
 class CategoriaController {
 
     private final CategoriaRepository categoriaRepository;
+    private final PedidoRepository pedidoRepository;
 
-    CategoriaController(CategoriaRepository categoriaRepository) {
+    CategoriaController(CategoriaRepository categoriaRepository, PedidoRepository pedidoRepository) {
         this.categoriaRepository = categoriaRepository;
+        this.pedidoRepository = pedidoRepository;
     }
+
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<Void> novaCategoria(@RequestBody @Valid NovaCategoriaRequest novaCategoriaRequest,
                                        UriComponentsBuilder uriBuilder) {
@@ -34,6 +36,16 @@ class CategoriaController {
                 .toUri();
 
         return ResponseEntity.created(location).build();
+    }
+
+    @GetMapping("/pedidos")
+    ResponseEntity<PedidosPorCategoriaResponse> listaPedidosPorCategoria() {
+
+        var pedidosPorCategoriaProjection = pedidoRepository.findGroupByCateoria();
+
+        var pedidosPorCategoriaResponse = PedidosPorCategoriaResponse.from(pedidosPorCategoriaProjection);
+
+        return ResponseEntity.ok().body(pedidosPorCategoriaResponse);
     }
 
 }
