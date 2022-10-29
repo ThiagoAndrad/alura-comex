@@ -1,4 +1,4 @@
-package br.com.alura.comex.controller.dto;
+package br.com.alura.comex.features.cliente;
 
 import br.com.alura.comex.entity.Cliente;
 import br.com.alura.comex.entity.Estado;
@@ -7,7 +7,6 @@ import org.hibernate.validator.constraints.br.CPF;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.Objects;
 
 import static java.util.Objects.isNull;
 

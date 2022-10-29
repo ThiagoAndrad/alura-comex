@@ -1,7 +1,5 @@
-package br.com.alura.comex.controller;
+package br.com.alura.comex.features.categoria;
 
-import br.com.alura.comex.controller.dto.NovaCategoriaRequest;
-import br.com.alura.comex.controller.dto.PedidosPorCategoriaResponse;
 import br.com.alura.comex.repository.CategoriaRepository;
 import br.com.alura.comex.repository.PedidoRepository;
 import org.springframework.http.MediaType;

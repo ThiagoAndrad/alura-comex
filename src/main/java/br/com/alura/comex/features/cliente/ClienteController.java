@@ -1,7 +1,5 @@
-package br.com.alura.comex.controller;
+package br.com.alura.comex.features.cliente;
 
-import br.com.alura.comex.controller.dto.ClientesPaginadosResponse;
-import br.com.alura.comex.controller.dto.NovoClienteRequest;
 import br.com.alura.comex.repository.ClienteRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

@@ -1,4 +1,4 @@
-package br.com.alura.comex.controller.dto;
+package br.com.alura.comex.features.produto;
 
 import br.com.alura.comex.entity.Categoria;
 import br.com.alura.comex.entity.Produto;
@@ -9,7 +9,7 @@ import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 
-public record NovoProdutoRequest(
+record NovoProdutoRequest(
 
         @NotBlank
         @Size(min = 2)
@@ -28,7 +28,7 @@ public record NovoProdutoRequest(
 ) {
 
 
-    public Produto toProduto(Categoria categoria) {
+    Produto toProduto(Categoria categoria) {
 
         return new Produto(
                 this.nome,

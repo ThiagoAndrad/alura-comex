@@ -1,11 +1,11 @@
-package br.com.alura.comex.controller.dto;
+package br.com.alura.comex.features.produto;
 
 import br.com.alura.comex.entity.Produto;
 import org.springframework.data.domain.Page;
 
 import java.math.BigDecimal;
 
-public record ProdutosPaginadosResponse(
+record ProdutosPaginadosResponse(
         String nome,
 
         String descricao,
@@ -17,7 +17,7 @@ public record ProdutosPaginadosResponse(
         Long idDaCategoria
 ) {
 
-    public static Page<ProdutosPaginadosResponse> from(Page<Produto> pagesOfProducts) {
+    static Page<ProdutosPaginadosResponse> from(Page<Produto> pagesOfProducts) {
 
         return pagesOfProducts.map(produto -> new ProdutosPaginadosResponse(
                 produto.getNome(),

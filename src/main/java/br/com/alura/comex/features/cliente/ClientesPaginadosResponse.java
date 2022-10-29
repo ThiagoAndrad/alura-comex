@@ -1,9 +1,9 @@
-package br.com.alura.comex.controller.dto;
+package br.com.alura.comex.features.cliente;
 
 import br.com.alura.comex.entity.Cliente;
 import org.springframework.data.domain.Page;
 
-public class ClientesPaginadosResponse {
+class ClientesPaginadosResponse {
     private final String nome;
     private final String cpf;
     private final String telefone;
@@ -17,19 +17,20 @@ public class ClientesPaginadosResponse {
         this.local = formataLocal(cliente);
     }
 
-    public String getNome() {
+    String getNome() {
         return nome;
     }
 
-    public String getCpf() {
+    String getCpf() {
         return cpf;
     }
 
-    public String getTelefone() {
+    String getTelefone() {
         return telefone;
     }
 
-    public String getLocal() {
+
+    String getLocal() {
         return local;
     }
 
@@ -41,7 +42,7 @@ public class ClientesPaginadosResponse {
     }
 
 
-    public static Page<ClientesPaginadosResponse> from(Page<Cliente> clientesPaginados) {
+    static Page<ClientesPaginadosResponse> from(Page<Cliente> clientesPaginados) {
 
         return clientesPaginados.map(ClientesPaginadosResponse::new);
     }

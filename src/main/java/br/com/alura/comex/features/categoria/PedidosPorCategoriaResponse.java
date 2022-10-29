@@ -1,14 +1,14 @@
-package br.com.alura.comex.controller.dto;
+package br.com.alura.comex.features.categoria;
 
 import br.com.alura.comex.repository.projection.PedidosPorCategoriaProjection;
 
 import java.math.BigDecimal;
 import java.util.List;
 
-public record PedidosPorCategoriaResponse(
+record PedidosPorCategoriaResponse(
         List<PedidoPorCategoriaResponse> pedidosPorCategoria
 ) {
-    public static PedidosPorCategoriaResponse from(List<PedidosPorCategoriaProjection> projections) {
+    static PedidosPorCategoriaResponse from(List<PedidosPorCategoriaProjection> projections) {
         var pedidosPorCategoria = projections.stream()
                 .map(projection -> new PedidoPorCategoriaResponse(
                         projection.getNomeCategoria(),
