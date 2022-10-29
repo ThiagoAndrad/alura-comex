@@ -31,7 +31,8 @@ class PedidoService {
                   ClienteRepository clienteRepository,
                   ProdutoRepository produtoRepository,
                   CalculadoraDeItemPedido calculadoraDeItemPedido,
-                  CalculadoraPedido calculadoraPedido, ItemPedidoRepository itemPedidoRepository) {
+                  CalculadoraPedido calculadoraPedido,
+                  ItemPedidoRepository itemPedidoRepository) {
 
         this.pedidoRepository = pedidoRepository;
         this.clienteRepository = clienteRepository;

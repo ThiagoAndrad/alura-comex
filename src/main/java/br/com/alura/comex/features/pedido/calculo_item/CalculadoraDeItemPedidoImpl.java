@@ -9,9 +9,9 @@ class CalculadoraDeItemPedidoImpl implements CalculadoraDeItemPedido {
 
     private final RegraDeDesconto regraDeDesconto;
 
-    private final RegradDeDescontoFactory regraDeDescontoFactory;
+    private final RegraDeDescontoFactory regraDeDescontoFactory;
 
-    CalculadoraDeItemPedidoImpl(RegradDeDescontoFactory regraDeDescontoFactory) {
+    CalculadoraDeItemPedidoImpl(RegraDeDescontoFactory regraDeDescontoFactory) {
         this.regraDeDescontoFactory = regraDeDescontoFactory;
         this.regraDeDesconto = regraDeDescontoFactory.create();
     }
