@@ -1,8 +1,9 @@
 package br.com.alura.comex.features.pedido.calculo_pedido;
 
 import br.com.alura.comex.entity.Cliente;
+import br.com.alura.comex.entity.ItemDePedido;
+import br.com.alura.comex.entity.Pedido;
 import br.com.alura.comex.entity.TipoDesconto;
-import br.com.alura.comex.features.pedido.calculo_item.DetalheItemPedidoCalculado;
 import br.com.alura.comex.repository.PedidoRepository;
 import org.springframework.stereotype.Component;
 
@@ -15,30 +16,30 @@ class CalculadoraPedidoImpl implements CalculadoraPedido {
     private static final int NUMERO_MINIMO_DE_PEDIDOS_PARA_DESCONTO = 5;
     private final PedidoRepository pedidoRepository;
 
-    CalculadoraPedidoImpl(PedidoRepository pedidoRepository) {
+    private final  PedidoFactory pedidoFactory;
+
+    CalculadoraPedidoImpl(PedidoRepository pedidoRepository, PedidoFactory pedidoFactory) {
         this.pedidoRepository = pedidoRepository;
+        this.pedidoFactory = pedidoFactory;
     }
 
     @Override
-    public DetalhePedidoCalculado calculo(List<DetalheItemPedidoCalculado> detalheItemPedidoCalculados, Cliente cliente) {
+    public Pedido calculo(List<ItemDePedido> itensDePedidos, Cliente cliente) {
 
-        var valorTotalDosItens = detalheItemPedidoCalculados.stream()
-                .map(DetalheItemPedidoCalculado::getValorTotal)
+        var valorTotalDosItens = itensDePedidos.stream()
+                .map(ItemDePedido::getValorTotalItemComDesconto)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
 
         var numeroDePedidosDoCliente = pedidoRepository.countPedidosByCliente(cliente);
         if (numeroDePedidosDoCliente >= NUMERO_MINIMO_DE_PEDIDOS_PARA_DESCONTO) {
 
-            return aplicaDescontoFidelidade(valorTotalDosItens);
+            var desconto = valorTotalDosItens.multiply(BigDecimal.valueOf(0.05));
+
+            return pedidoFactory.criaPedido(desconto, cliente, TipoDesconto.FIDELIDADE);
         }
 
-        return new DetalhePedidoCalculado(valorTotalDosItens, TipoDesconto.NENHUM);
+        return pedidoFactory.criaPedido(BigDecimal.ZERO, cliente, TipoDesconto.NENHUM);
     }
 
-    private DetalhePedidoCalculado aplicaDescontoFidelidade(BigDecimal valorTotalDosItens) {
-        var valorTotalComDesconto = valorTotalDosItens.multiply(BigDecimal.valueOf(0.95));
-
-        return new DetalhePedidoCalculado(valorTotalComDesconto, TipoDesconto.FIDELIDADE);
-    }
 }

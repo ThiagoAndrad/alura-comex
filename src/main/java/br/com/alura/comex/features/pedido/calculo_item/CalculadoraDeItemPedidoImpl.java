@@ -1,9 +1,8 @@
 package br.com.alura.comex.features.pedido.calculo_item;
 
+import br.com.alura.comex.entity.ItemDePedido;
 import br.com.alura.comex.entity.Produto;
 import org.springframework.stereotype.Component;
-
-import java.math.BigDecimal;
 
 @Component
 class CalculadoraDeItemPedidoImpl implements CalculadoraDeItemPedido {
@@ -18,12 +17,16 @@ class CalculadoraDeItemPedidoImpl implements CalculadoraDeItemPedido {
     }
 
     @Override
-    public DetalheItemPedidoCalculado calcula(int quantidade, Produto produto) {
+    public ItemDePedido calcula(int quantidade, Produto produto) {
 
-        var valorTotal = produto.getPrecoUnitario()
-                .multiply(BigDecimal.valueOf(quantidade));
+        var itemDePedido = new ItemDePedido(quantidade, produto);
+        var valorTotalItem = itemDePedido.getValorTotalItem();
 
+        var descontoItemPedido = regraDeDesconto.aplica(quantidade, valorTotalItem);
 
-        return regraDeDesconto.aplica(quantidade, valorTotal);
+        itemDePedido.setDesconto(descontoItemPedido.valorTotal());
+        itemDePedido.setTipoDesconto(descontoItemPedido.tipo());
+
+        return itemDePedido;
     }
 }

@@ -4,5 +4,5 @@ import java.math.BigDecimal;
 
 public interface RegraDeDesconto {
 
-    DetalheItemPedidoCalculado aplica(int quantidade, BigDecimal valorTotal);
+    DescontoItemPedido aplica(int quantidade, BigDecimal valorTotal);
 }

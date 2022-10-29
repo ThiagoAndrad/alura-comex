@@ -4,9 +4,9 @@ import br.com.alura.comex.entity.*;
 import br.com.alura.comex.exception.NotFoundException;
 import br.com.alura.comex.exception.UnprocessableEntityException;
 import br.com.alura.comex.features.pedido.calculo_item.CalculadoraDeItemPedido;
-import br.com.alura.comex.features.pedido.calculo_item.DetalheItemPedidoCalculado;
 import br.com.alura.comex.features.pedido.calculo_pedido.CalculadoraPedido;
 import br.com.alura.comex.repository.ClienteRepository;
+import br.com.alura.comex.repository.ItemPedidoRepository;
 import br.com.alura.comex.repository.PedidoRepository;
 import br.com.alura.comex.repository.ProdutoRepository;
 import org.springframework.stereotype.Service;
@@ -20,38 +20,45 @@ import static java.lang.String.format;
 class PedidoService {
 
     private final PedidoRepository pedidoRepository;
-
     private final ClienteRepository clienteRepository;
-
     private final ProdutoRepository produtoRepository;
+    private final CalculadoraDeItemPedido calculadoraDeItemPedido;
+    private final CalculadoraPedido calculadoraPedido;
+    private final ItemPedidoRepository itemPedidoRepository;
 
-    private final CalculadoraDeItemPedido calculadoraDePedido;
-
-    private  final CalculadoraPedido calculadoraPedido;
 
     PedidoService(PedidoRepository pedidoRepository,
                   ClienteRepository clienteRepository,
                   ProdutoRepository produtoRepository,
-                  CalculadoraDeItemPedido calculadoraDePedido,
-                  CalculadoraPedido calculadoraPedido) {
+                  CalculadoraDeItemPedido calculadoraDeItemPedido,
+                  CalculadoraPedido calculadoraPedido, ItemPedidoRepository itemPedidoRepository) {
 
         this.pedidoRepository = pedidoRepository;
         this.clienteRepository = clienteRepository;
         this.produtoRepository = produtoRepository;
-        this.calculadoraDePedido = calculadoraDePedido;
+        this.calculadoraDeItemPedido = calculadoraDeItemPedido;
         this.calculadoraPedido = calculadoraPedido;
+        this.itemPedidoRepository = itemPedidoRepository;
     }
 
-    void novoPedido(NovoPedidoRequest novoPedidoRequest) {
+    Pedido novoPedido(NovoPedidoRequest novoPedidoRequest) {
         var cliente = findCliente(novoPedidoRequest);
 
-        List<DetalheItemPedidoCalculado> detalheItensPedidosCalculados = calculaItensDoPedido(novoPedidoRequest);
+        var itensDePedidos = calculaItensDoPedido(novoPedidoRequest);
 
-        var pedido = constroiPedido(cliente, detalheItensPedidosCalculados);
+        var pedido = calculadoraPedido.calculo(itensDePedidos, cliente);
+
+        pedidoRepository.save(pedido);
+
+        itensDePedidos.forEach(itemDePedido -> itemDePedido.setPedido(pedido));
+
+        itemPedidoRepository.saveAll(itensDePedidos);
+
+        return pedido;
     }
 
-    private List<DetalheItemPedidoCalculado> calculaItensDoPedido(NovoPedidoRequest novoPedidoRequest) {
-        List<DetalheItemPedidoCalculado> detalheItensPedidosCalculados = new ArrayList<>();
+    private List<ItemDePedido> calculaItensDoPedido(NovoPedidoRequest novoPedidoRequest) {
+        List<ItemDePedido> itensDePedidos = new ArrayList<>();
         for (ProdutoPedidoRequest produtoRequest : novoPedidoRequest.produtos()) {
 
             var produto = findProduto(produtoRequest);
@@ -59,22 +66,14 @@ class PedidoService {
             var quantidade = produtoRequest.quantidade();
             validaQuantidade(quantidade, produto);
 
-            var itemPedidoCalculado = calculadoraDePedido.calcula(quantidade, produto);
+            var itemPedido = calculadoraDeItemPedido.calcula(quantidade, produto);
 
-            detalheItensPedidosCalculados.add(itemPedidoCalculado);
+            itensDePedidos.add(itemPedido);
         }
-        return detalheItensPedidosCalculados;
+
+        return itensDePedidos;
     }
 
-    private Pedido constroiPedido(Cliente cliente, List<DetalheItemPedidoCalculado> detalheItensPedidosCalculados) {
-        var detalhePedidoCalculado = calculadoraPedido.calculo(detalheItensPedidosCalculados, cliente);
-        var pedido = new Pedido();
-        pedido.setCliente(cliente);
-        pedido.setDesconto(detalhePedidoCalculado.getValorTotal());
-        pedido.setTipoDesconto(detalhePedidoCalculado.getTipoDesconto());
-
-        return pedido;
-    }
 
     private static void validaQuantidade(int quantidade, Produto produto) {
         if (quantidade > produto.getQuantidadeEstoque()) {

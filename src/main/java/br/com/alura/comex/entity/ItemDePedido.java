@@ -43,6 +43,11 @@ public class ItemDePedido {
         return this.precoUnitario.multiply(new BigDecimal(this.quantidade));
     }
 
+    public BigDecimal getValorTotalItemComDesconto() {
+        return this.precoUnitario.multiply(new BigDecimal(this.quantidade))
+                .subtract(this.desconto);
+    }
+
     public Long getId() {
         return id;
     }

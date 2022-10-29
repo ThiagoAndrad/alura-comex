@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 
 class RegraSemDesconto implements RegraDeDesconto {
     @Override
-    public DetalheItemPedidoCalculado aplica(int quantidade, BigDecimal valorTotal) {
-        return new DetalheItemPedidoCalculado(BigDecimal.ZERO, TipoDescontoItem.NENHUM);
+    public DescontoItemPedido aplica(int quantidade, BigDecimal valorTotal) {
+        return new DescontoItemPedido(BigDecimal.ZERO, TipoDescontoItem.NENHUM);
     }
 }

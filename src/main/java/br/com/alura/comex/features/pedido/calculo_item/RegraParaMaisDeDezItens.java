@@ -12,12 +12,12 @@ class RegraParaMaisDeDezItens implements RegraDeDesconto {
     }
 
     @Override
-    public DetalheItemPedidoCalculado aplica(int quantidade, BigDecimal valorTotal) {
+    public DescontoItemPedido aplica(int quantidade, BigDecimal valorTotal) {
 
         if (quantidade > 10) {
             var valorComDesconto = valorTotal.multiply(BigDecimal.valueOf(0.9));
 
-            return new DetalheItemPedidoCalculado(valorComDesconto, TipoDescontoItem.QUANTIDADE);
+            return new DescontoItemPedido(valorComDesconto, TipoDescontoItem.QUANTIDADE);
         }
 
         return proximaRegra.aplica(quantidade, valorTotal);
