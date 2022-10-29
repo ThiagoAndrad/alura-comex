@@ -1,11 +1,6 @@
 package br.com.alura.comex.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "clientes")
@@ -38,7 +33,8 @@ public class Cliente {
 	private String cidade;
 
 	@Column(nullable = false)
-	private String estado;
+	@Enumerated(EnumType.STRING)
+	private Estado estado;
 
 	public Cliente() {
 	}
@@ -115,11 +111,11 @@ public class Cliente {
 		this.cidade = cidade;
 	}
 
-	public String getEstado() {
+	public Estado getEstado() {
 		return estado;
 	}
 
-	public void setEstado(String estado) {
+	public void setEstado(Estado estado) {
 		this.estado = estado;
 	}
 
