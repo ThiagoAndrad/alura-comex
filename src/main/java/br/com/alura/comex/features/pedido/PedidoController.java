@@ -5,7 +5,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 @RestController
@@ -19,10 +21,16 @@ class PedidoController {
     }
 
     @PostMapping
-    ResponseEntity<Void> novoPedido(@RequestBody @Valid NovoPedidoRequest novoPedidoRequest) {
+    @Transactional
+    ResponseEntity<Void> novoPedido(@RequestBody @Valid NovoPedidoRequest novoPedidoRequest,
+                                    UriComponentsBuilder uriBuilder) {
 
-        pedidoService.novoPedido(novoPedidoRequest);
+        var pedido = pedidoService.novoPedido(novoPedidoRequest);
 
-        return null;
+        var location = uriBuilder.path("api/pedidos/{id}")
+                .buildAndExpand(pedido.getId())
+                .toUri();
+
+        return ResponseEntity.created(location).build();
     }
 }
