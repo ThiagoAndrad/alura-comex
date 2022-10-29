@@ -92,4 +92,7 @@ public class Produto {
 		this.categoria = categoria;
 	}
 
+    public void retiraDoEstoque(int quantidade) {
+		this.quantidadeEstoque = this.quantidadeEstoque - quantidade;
+    }
 }

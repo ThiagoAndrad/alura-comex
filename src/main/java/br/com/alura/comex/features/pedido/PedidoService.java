@@ -44,7 +44,7 @@ class PedidoService {
     Pedido novoPedido(NovoPedidoRequest novoPedidoRequest) {
         var cliente = findCliente(novoPedidoRequest);
 
-        var itensDePedidos = calculaItensDoPedido(novoPedidoRequest);
+        var itensDePedidos = calculaItensDoPedidoEAtualizaEstoque(novoPedidoRequest);
 
         var pedido = calculadoraPedido.calculo(itensDePedidos, cliente);
 
@@ -57,7 +57,8 @@ class PedidoService {
         return pedido;
     }
 
-    private List<ItemDePedido> calculaItensDoPedido(NovoPedidoRequest novoPedidoRequest) {
+    // * solucao nao performatica *
+    private List<ItemDePedido> calculaItensDoPedidoEAtualizaEstoque(NovoPedidoRequest novoPedidoRequest) {
         List<ItemDePedido> itensDePedidos = new ArrayList<>();
         for (ProdutoPedidoRequest produtoRequest : novoPedidoRequest.produtos()) {
 
@@ -69,6 +70,9 @@ class PedidoService {
             var itemPedido = calculadoraDeItemPedido.calcula(quantidade, produto);
 
             itensDePedidos.add(itemPedido);
+
+            produto.retiraDoEstoque(quantidade);
+            produtoRepository.save(produto);
         }
 
         return itensDePedidos;
