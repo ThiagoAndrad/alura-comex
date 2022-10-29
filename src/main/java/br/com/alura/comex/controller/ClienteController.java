@@ -1,15 +1,18 @@
 package br.com.alura.comex.controller;
 
+import br.com.alura.comex.controller.dto.ClientesPaginadosResponse;
 import br.com.alura.comex.controller.dto.NovoClienteRequest;
 import br.com.alura.comex.repository.ClienteRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
+
+import static org.springframework.data.domain.Sort.Direction.ASC;
 
 @RestController
 @RequestMapping("api/clientes")
@@ -34,5 +37,15 @@ class ClienteController {
                 .toUri();
 
         return ResponseEntity.created(location).build();
+    }
+
+    @GetMapping
+    ResponseEntity<Page<ClientesPaginadosResponse>> listaClientes(@PageableDefault(sort = "nome", direction = ASC, size = 5) Pageable pageable) {
+
+        var clientesPaginados = clienteRepository.findAll(pageable);
+
+        var clientesPaginadosResponse = ClientesPaginadosResponse.from(clientesPaginados);
+
+        return ResponseEntity.ok(clientesPaginadosResponse);
     }
 }
