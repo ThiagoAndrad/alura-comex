@@ -1,5 +1,6 @@
 package br.com.alura.comex.repository;
 
+import br.com.alura.comex.entity.Cliente;
 import br.com.alura.comex.entity.Pedido;
 import br.com.alura.comex.repository.projection.PedidosPorCategoriaProjection;
 import org.springframework.data.jpa.repository.Query;
@@ -22,4 +23,6 @@ public interface PedidoRepository extends CrudRepository<Pedido, Long> {
                 GROUP BY categoria_id
             """, nativeQuery = true)
     List<PedidosPorCategoriaProjection> findGroupByCateoria();
+
+    long countPedidosByCliente(Cliente cliente);
 }

@@ -22,5 +22,7 @@ class PedidoController {
     ResponseEntity<Void> novoPedido(@RequestBody @Valid NovoPedidoRequest novoPedidoRequest) {
 
         pedidoService.novoPedido(novoPedidoRequest);
+
+        return null;
     }
 }

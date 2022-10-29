@@ -1,4 +1,4 @@
-package br.com.alura.comex.features.pedido.calculo;
+package br.com.alura.comex.features.pedido.calculo_item;
 
 import org.springframework.stereotype.Component;
 

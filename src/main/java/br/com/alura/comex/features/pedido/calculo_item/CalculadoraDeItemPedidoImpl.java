@@ -1,4 +1,4 @@
-package br.com.alura.comex.features.pedido.calculo;
+package br.com.alura.comex.features.pedido.calculo_item;
 
 import br.com.alura.comex.entity.Produto;
 import org.springframework.stereotype.Component;
@@ -18,7 +18,7 @@ class CalculadoraDeItemPedidoImpl implements CalculadoraDeItemPedido {
     }
 
     @Override
-    public ItemPedidoCalculado calcula(int quantidade, Produto produto) {
+    public DetalheItemPedidoCalculado calcula(int quantidade, Produto produto) {
 
         var valorTotal = produto.getPrecoUnitario()
                 .multiply(BigDecimal.valueOf(quantidade));

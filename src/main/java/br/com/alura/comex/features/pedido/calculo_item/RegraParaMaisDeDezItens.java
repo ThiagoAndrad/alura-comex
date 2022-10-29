@@ -1,4 +1,4 @@
-package br.com.alura.comex.features.pedido.calculo;
+package br.com.alura.comex.features.pedido.calculo_item;
 
 import br.com.alura.comex.entity.TipoDescontoItem;
 
@@ -12,12 +12,12 @@ class RegraParaMaisDeDezItens implements RegraDeDesconto {
     }
 
     @Override
-    public ItemPedidoCalculado aplica(int quantidade, BigDecimal valorTotal) {
+    public DetalheItemPedidoCalculado aplica(int quantidade, BigDecimal valorTotal) {
 
         if (quantidade > 10) {
             var valorComDesconto = valorTotal.multiply(BigDecimal.valueOf(0.9));
 
-            return new ItemPedidoCalculado(valorComDesconto, TipoDescontoItem.QUANTIDADE);
+            return new DetalheItemPedidoCalculado(valorComDesconto, TipoDescontoItem.QUANTIDADE);
         }
 
         return proximaRegra.aplica(quantidade, valorTotal);
