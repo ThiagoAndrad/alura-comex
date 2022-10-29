@@ -4,7 +4,6 @@ import br.com.alura.comex.repository.projection.PedidosPorCategoriaProjection;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public record PedidosPorCategoriaResponse(
         List<PedidoPorCategoriaResponse> pedidosPorCategoria
@@ -15,7 +14,7 @@ public record PedidosPorCategoriaResponse(
                         projection.getNomeCategoria(),
                         projection.getQuantidadeProdutosVendidos(),
                         projection.getValorTotal())
-                ).collect(Collectors.toList());
+                ).toList();
 
         return new PedidosPorCategoriaResponse(pedidosPorCategoria);
     }
