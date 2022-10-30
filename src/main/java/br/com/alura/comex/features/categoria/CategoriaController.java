@@ -2,6 +2,7 @@ package br.com.alura.comex.features.categoria;
 
 import br.com.alura.comex.repository.CategoriaRepository;
 import br.com.alura.comex.repository.PedidoRepository;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,7 +38,8 @@ class CategoriaController {
     }
 
     @GetMapping("/pedidos")
-    ResponseEntity<PedidosPorCategoriaResponse> listaPedidosPorCategoria() {
+    @Cacheable(value = "pedidos_por_categoria")
+    public ResponseEntity<PedidosPorCategoriaResponse> listaPedidosPorCategoria() {
 
         var pedidosPorCategoriaProjection = pedidoRepository.findGroupByCateoria();
 
