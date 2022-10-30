@@ -1,5 +1,6 @@
 package br.com.alura.comex.features.pedido;
 
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,7 +23,8 @@ class PedidoController {
 
     @PostMapping
     @Transactional
-    ResponseEntity<Void> novoPedido(@RequestBody @Valid NovoPedidoRequest novoPedidoRequest,
+    @CacheEvict(value = "pedidos_por_categoria", allEntries = true)
+    public ResponseEntity<Void> novoPedido(@RequestBody @Valid NovoPedidoRequest novoPedidoRequest,
                                     UriComponentsBuilder uriBuilder) {
 
         var pedido = pedidoService.novoPedido(novoPedidoRequest);
