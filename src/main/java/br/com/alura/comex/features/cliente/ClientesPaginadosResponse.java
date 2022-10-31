@@ -17,20 +17,20 @@ class ClientesPaginadosResponse {
         this.local = formataLocal(cliente);
     }
 
-    String getNome() {
+    public String getNome() {
         return nome;
     }
 
-    String getCpf() {
+    public String getCpf() {
         return cpf;
     }
 
-    String getTelefone() {
+    public String getTelefone() {
         return telefone;
     }
 
 
-    String getLocal() {
+    public String getLocal() {
         return local;
     }
 
