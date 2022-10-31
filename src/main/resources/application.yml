@@ -10,3 +10,19 @@ spring:
     url: jdbc:mysql://localhost:3306/comex?createDatabaseIfNotExist=true
     username: root
     password:
+
+management:
+  info:
+    env:
+      enabled: true
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+info:
+  app:
+    name: @project.name@
+    version: @project.version@
