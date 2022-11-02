@@ -1,5 +1,6 @@
 package br.com.alura.comex.security;
 
+import br.com.alura.comex.repository.UsuarioRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -20,9 +21,12 @@ class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private final AuthService authService;
     private final TokenService tokenService;
 
-    SecurityConfiguration(AuthService authService, TokenService tokenService) {
+    private final UsuarioRepository usuarioRepository;
+
+    SecurityConfiguration(AuthService authService, TokenService tokenService, UsuarioRepository usuarioRepository) {
         this.authService = authService;
         this.tokenService = tokenService;
+        this.usuarioRepository = usuarioRepository;
     }
 
     @Override
@@ -44,7 +48,7 @@ class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
                 .and().csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and().addFilterBefore(new AuthTokenFilter(tokenService), UsernamePasswordAuthenticationFilter.class);
+                .and().addFilterBefore(new AuthTokenFilter(tokenService, usuarioRepository), UsernamePasswordAuthenticationFilter.class);
     }
 
     @Override

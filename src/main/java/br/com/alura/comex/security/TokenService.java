@@ -1,6 +1,7 @@
 package br.com.alura.comex.security;
 
 import br.com.alura.comex.entity.Usuario;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
@@ -46,5 +47,14 @@ public class TokenService {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    public Long getUsuarioId(String token) {
+        var clains = Jwts.parser()
+                .setSigningKey(this.secret)
+                .parseClaimsJws(token)
+                .getBody();
+
+        return Long.parseLong(clains.getSubject());
     }
 }
