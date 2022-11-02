@@ -10,7 +10,13 @@ import java.io.IOException;
 
 import static java.util.Objects.isNull;
 
-public class AuthTokenFilter extends OncePerRequestFilter {
+class AuthTokenFilter extends OncePerRequestFilter {
+
+    private final TokenService tokenService;
+
+    AuthTokenFilter(TokenService tokenService) {
+        this.tokenService = tokenService;
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -20,7 +26,9 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
         var token = extraiToken(request);
 
-        //TODO validar token
+        if (tokenService.isTokenValido(token)) {
+            //TODO autenticar
+        }
 
         filterChain.doFilter(request, response);
     }
