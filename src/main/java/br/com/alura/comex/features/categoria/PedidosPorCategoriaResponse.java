@@ -2,12 +2,13 @@ package br.com.alura.comex.features.categoria;
 
 import br.com.alura.comex.repository.projection.PedidosPorCategoriaProjection;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 
 record PedidosPorCategoriaResponse(
         List<PedidoPorCategoriaResponse> pedidosPorCategoria
-) {
+) implements Serializable {
     static PedidosPorCategoriaResponse from(List<PedidosPorCategoriaProjection> projections) {
         var pedidosPorCategoria = projections.stream()
                 .map(projection -> new PedidoPorCategoriaResponse(
@@ -25,5 +26,5 @@ record PedidoPorCategoriaResponse(
         String nomeCategoria,
         int quantidadeProdutosVendidos,
         BigDecimal valorTotal
-) {
+) implements Serializable {
 }

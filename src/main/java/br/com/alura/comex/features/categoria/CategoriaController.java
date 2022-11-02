@@ -39,13 +39,11 @@ class CategoriaController {
 
     @GetMapping("/pedidos")
     @Cacheable(value = "pedidos_por_categoria")
-    public ResponseEntity<PedidosPorCategoriaResponse> listaPedidosPorCategoria() {
+    public PedidosPorCategoriaResponse listaPedidosPorCategoria() {
 
         var pedidosPorCategoriaProjection = pedidoRepository.findGroupByCateoria();
 
-        var pedidosPorCategoriaResponse = PedidosPorCategoriaResponse.from(pedidosPorCategoriaProjection);
-
-        return ResponseEntity.ok().body(pedidosPorCategoriaResponse);
+        return PedidosPorCategoriaResponse.from(pedidosPorCategoriaProjection);
     }
 
 }
