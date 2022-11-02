@@ -26,3 +26,8 @@ info:
   app:
     name: @project.name@
     version: @project.version@
+
+api:
+  jwt:
+    expiracao: 86400000
+    secret: DF[NN]#*(;Nge'N#.g5juDl,tNy/f5j#yjNL5Kj7yNQKDyft7N23#Q4L(*(U
