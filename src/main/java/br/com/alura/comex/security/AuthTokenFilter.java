@@ -1,7 +1,5 @@
 package br.com.alura.comex.security;
 
-import br.com.alura.comex.entity.Usuario;
-import br.com.alura.comex.exception.NotFoundException;
 import br.com.alura.comex.repository.UsuarioRepository;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -35,8 +33,9 @@ class AuthTokenFilter extends OncePerRequestFilter {
 
         var token = extraiToken(request);
 
-        if (tokenService.isTokenValido(token)) {
-            autentica(token);
+
+        if (!token.isEmpty() && tokenService.isTokenValido(token.get())) {
+            autentica(token.get());
         }
 
         filterChain.doFilter(request, response);
@@ -49,22 +48,18 @@ class AuthTokenFilter extends OncePerRequestFilter {
         SecurityContextHolder.getContext().setAuthentication(usuarioAutenticado);
     }
 
-    private String extraiToken(HttpServletRequest request) {
+    private Optional<String> extraiToken(HttpServletRequest request) {
 
         var tipoDoTokenComEspaco = "Bearer ";
         var tokenComTipo = request.getHeader("Authorization");
 
-        if (isNull(tokenComTipo)) {
-            throw new ForbiddenException();
-        }
+        if (isNull(tokenComTipo) || tokenComTipo.isBlank() || !tokenComTipo.startsWith(tipoDoTokenComEspaco)) {
 
-        if (tokenComTipo.isBlank() || !tokenComTipo.startsWith(tipoDoTokenComEspaco)) {
-
-            throw new UnauthorizedException();
+            return Optional.empty();
         }
 
         var token = tokenComTipo.replaceAll(tipoDoTokenComEspaco, "");
 
-        return token;
+        return Optional.of(token);
     }
 }
