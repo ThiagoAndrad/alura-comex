@@ -17,7 +17,6 @@ spring:
   cache:
     redis:
       time-to-live: 60000
-#    cache-names: users,product,order
 
 management:
   info:
