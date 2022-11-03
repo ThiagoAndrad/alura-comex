@@ -1,0 +1,23 @@
+version: "3.9"
+services:
+  db:
+    image: mysql:8.0.31
+    container_name: alura-comex-db
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=true
+    ports:
+      - 3306:3306
+    volumes:
+      - mysql:/var/lib/mysql
+
+  redis:
+    image: redis:6.2
+    container_name: alura-comex-redis
+    ports:
+      - 6379:6379
+    volumes:
+      - redis:/data
+
+volumes:
+  redis:
+  mysql:
